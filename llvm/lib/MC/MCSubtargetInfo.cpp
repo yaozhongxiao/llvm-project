@@ -21,6 +21,9 @@
 
 using namespace llvm;
 
+// For Cpu0
+bool Cpu0DisableUnreconginizedMessage = false;
+
 /// Find KV in array using binary search.
 template <typename T>
 static const T *Find(StringRef S, ArrayRef<T> A) {
@@ -208,6 +211,14 @@ static FeatureBitset getFeatures(StringRef CPU, StringRef TuneCPU, StringRef FS,
 
 void MCSubtargetInfo::InitMCProcessorInfo(StringRef CPU, StringRef TuneCPU,
                                           StringRef FS) {
+#if 1
+  if (TargetTriple.getArch() == llvm::Triple::cpu0 ||
+      TargetTriple.getArch() == llvm::Triple::cpu0el) {
+    bool Cpu0DisableUnreconginizedMessage = true;
+    errs() << "InitMCProcessorInfo with TargetTriple ["
+           << TargetTriple.normalize() << "]\n";
+  }
+#endif
   FeatureBits = getFeatures(CPU, TuneCPU, FS, ProcDesc, ProcFeatures);
   FeatureString = std::string(FS);
 

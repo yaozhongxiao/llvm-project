@@ -106,7 +106,9 @@ public:
     renderscript32, // 32-bit RenderScript
     renderscript64, // 64-bit RenderScript
     ve,             // NEC SX-Aurora Vector Engine
-    LastArchType = ve
+    cpu0,           // For Fake Cpu0 Backend
+    cpu0el,         // For Fake Cpu0 el Backend
+    LastArchType = cpu0el
   };
   enum SubArchType {
     NoSubArch,
@@ -954,6 +956,11 @@ public:
   /// Tests whether the target is wasm (32- and 64-bit).
   bool isWasm() const {
     return getArch() == Triple::wasm32 || getArch() == Triple::wasm64;
+  }
+
+  /// Tests whether the target is cpu0 (cpu0 and cpu0el).
+  bool isCpu0() const {
+    return getArch() == Triple::cpu0 || getArch() == Triple::cpu0el;
   }
 
   // Tests whether the target is CSKY
