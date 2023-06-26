@@ -15,8 +15,7 @@
 #ifndef LLVM_LIB_TARGET_CPU0_CPU0_H
 #define LLVM_LIB_TARGET_CPU0_CPU0_H
 
-// #include "Cpu0Config.h"
-// #include "MCTargetDesc/Cpu0MCTargetDesc.h"
+#include "MCTargetDesc/Cpu0MCTargetDesc.h"
 #include "llvm/Target/TargetMachine.h"
 
 namespace llvm {
@@ -25,4 +24,4 @@ class FunctionPass;
 
 } // namespace llvm
 
-#endif
+#endif // LLVM_LIB_TARGET_CPU0_CPU0_H

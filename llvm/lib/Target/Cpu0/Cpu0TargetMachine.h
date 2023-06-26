@@ -14,12 +14,14 @@
 #ifndef LLVM_LIB_TARGET_CPU0_CPU0TARGETMACHINE_H
 #define LLVM_LIB_TARGET_CPU0_CPU0TARGETMACHINE_H
 
+#include "Cpu0Subtarget.h"
+#include "MCTargetDesc/Cpu0ABIInfo.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/SelectionDAGISel.h"
 #include "llvm/CodeGen/TargetFrameLowering.h"
 #include "llvm/Support/CodeGen.h"
-#include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetLoweringObjectFile.h"
+#include "llvm/Target/TargetMachine.h"
 
 namespace llvm {
 class formatted_raw_ostream;
@@ -28,6 +30,11 @@ class Cpu0RegisterInfo;
 class Cpu0TargetMachine : public LLVMTargetMachine {
   bool isLittle;
   std::unique_ptr<TargetLoweringObjectFile> TLOF;
+  // Selected ABI
+  Cpu0ABIInfo ABI;
+  Cpu0Subtarget DefaultSubtarget;
+
+  mutable StringMap<std::unique_ptr<Cpu0Subtarget>> SubtargetMap;
 
 public:
   Cpu0TargetMachine(const Target &T, const Triple &TT, StringRef CPU,
@@ -37,6 +44,10 @@ public:
                     bool JIT, bool isLittle);
   ~Cpu0TargetMachine() override;
 
+  const Cpu0Subtarget *getSubtargetImpl() const { return &DefaultSubtarget; }
+
+  const Cpu0Subtarget *getSubtargetImpl(const Function &F) const override;
+
   // Pass Pipeline Configuration
   TargetPassConfig *createPassConfig(PassManagerBase &PM) override;
 
@@ -44,6 +55,7 @@ public:
     return TLOF.get();
   }
   bool isLittleEndian() const { return isLittle; }
+  const Cpu0ABIInfo &getABI() const { return ABI; }
 };
 
 /// Cpu0ebTargetMachine - Cpu032 big endian target machine.

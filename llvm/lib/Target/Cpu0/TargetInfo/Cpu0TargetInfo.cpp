@@ -23,9 +23,9 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeCpu0TargetInfo() {
   outs() << __func__ << "\n";
   RegisterTarget<Triple::cpu0,
                  /*HasJIT=*/true>
-      X(getTheCpu0Target(), "Cpu0", "Cpu0 (32-bit big endian)", "Cpu0");
+      X(getTheCpu0Target(), "cpu0", "Cpu0 (32-bit big endian)", "Cpu0");
 
   RegisterTarget<Triple::cpu0el,
                  /*HasJIT=*/true>
-      Y(getTheCpu0elTarget(), "Cpu0el", "Cpu0 (32-bit little endian)", "Cpu0");
+      Y(getTheCpu0elTarget(), "cpu0el", "Cpu0 (32-bit little endian)", "Cpu0");
 }

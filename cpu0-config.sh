@@ -19,5 +19,4 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")"; pwd -P)"
 BUILD_ROOT_DIR=`pwd`
 
-llvm-builder --build --target Cpu0 ${SCRIPT_DIR}
-#llvm-builder --build --force --target Cpu0 ${SCRIPT_DIR}
+llvm-builder --force --target Cpu0 ${SCRIPT_DIR}
