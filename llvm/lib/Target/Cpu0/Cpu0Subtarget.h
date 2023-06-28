@@ -15,7 +15,7 @@
 #define LLVM_LIB_TARGET_CPU0_CPU0SUBTARGET_H
 
 #include "Cpu0FrameLowering.h"
-// #include "Cpu0ISelLowering.h"
+#include "Cpu0ISelLowering.h"
 #include "Cpu0InstrInfo.h"
 #include "MCTargetDesc/Cpu0ABIInfo.h"
 #include "llvm/CodeGen/SelectionDAGTargetInfo.h"
@@ -222,9 +222,10 @@ protected:
 
   const SelectionDAGTargetInfo TSInfo;
 
-  // std::unique_ptr<const Cpu0InstrInfo> InstrInfo;
+  std::unique_ptr<const Cpu0InstrInfo> InstrInfo;
   std::unique_ptr<const Cpu0FrameLowering> FrameLowering;
-  // std::unique_ptr<const Cpu0TargetLowering> TLInfo;
+  // Cpu0TargetLowering for Cpu0 ISel
+  std::unique_ptr<const Cpu0TargetLowering> TLInfo;
 
 public:
   bool isPositionIndependent() const;
@@ -266,20 +267,21 @@ public:
   const SelectionDAGTargetInfo *getSelectionDAGInfo() const override {
     return &TSInfo;
   }
-  // const Cpu0InstrInfo *getInstrInfo() const override {
-  //   // return InstrInfo.get();
-  // }
+
+  const Cpu0InstrInfo *getInstrInfo() const override { return InstrInfo.get(); }
+
   const TargetFrameLowering *getFrameLowering() const override {
     return FrameLowering.get();
   }
+
   const Cpu0RegisterInfo *getRegisterInfo() const override {
-    assert(false && "getFrameLowering");
-    return nullptr;
-    // return &InstrInfo->getRegisterInfo();
+    return &InstrInfo->getRegisterInfo();
   }
-  // const Cpu0TargetLowering *getTargetLowering() const override {
-  //   return TLInfo.get();
-  // }
+
+  const Cpu0TargetLowering *getTargetLowering() const override {
+    return TLInfo.get();
+  }
+
   const InstrItineraryData *getInstrItineraryData() const override {
     return &InstrItins;
   }

@@ -30,7 +30,7 @@ unsigned Cpu0FunctionInfo::getGlobalBaseReg() {
   return GlobalBaseReg = Cpu0::GP;
 }
 
-void Cpu0FunctionInfo::createEhDataRegsFI() {
+void Cpu0FunctionInfo::createEhDataRegsFI(MachineFunction &MF) {
   const TargetRegisterInfo &TRI = *MF.getSubtarget().getRegisterInfo();
   for (int I = 0; I < 2; ++I) {
     const TargetRegisterClass &RC = Cpu0::CPURegsRegClass;
@@ -40,11 +40,13 @@ void Cpu0FunctionInfo::createEhDataRegsFI() {
   }
 }
 
-MachinePointerInfo Cpu0FunctionInfo::callPtrInfo(const char *ES) {
+MachinePointerInfo Cpu0FunctionInfo::callPtrInfo(const MachineFunction &MF,
+                                                 const char *ES) {
   return MachinePointerInfo(MF.getPSVManager().getExternalSymbolCallEntry(ES));
 }
 
-MachinePointerInfo Cpu0FunctionInfo::callPtrInfo(const GlobalValue *GV) {
+MachinePointerInfo Cpu0FunctionInfo::callPtrInfo(const MachineFunction &MF,
+                                                 const GlobalValue *GV) {
   return MachinePointerInfo(MF.getPSVManager().getGlobalValueCallEntry(GV));
 }
 

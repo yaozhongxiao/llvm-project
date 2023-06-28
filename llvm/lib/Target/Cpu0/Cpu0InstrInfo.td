@@ -317,13 +317,13 @@ def addr :
 class AlignedLoad<PatFrag Node> :
   PatFrag<(ops node:$ptr), (Node node:$ptr), [{
   LoadSDNode *LD = cast<LoadSDNode>(N);
-  return LD->getMemoryVT().getSizeInBits()/8 <= LD->getAlignment();
+  return LD->getMemoryVT().getSizeInBits()/8 <= LD->getAlign().value();
 }]>;
 
 class AlignedStore<PatFrag Node> :
   PatFrag<(ops node:$val, node:$ptr), (Node node:$val, node:$ptr), [{
   StoreSDNode *SD = cast<StoreSDNode>(N);
-  return SD->getMemoryVT().getSizeInBits()/8 <= SD->getAlignment();
+  return SD->getMemoryVT().getSizeInBits()/8 <= SD->getAlign().value();
 }]>;
 //#endif
 
@@ -587,8 +587,8 @@ let Predicates = [Ch9_1] in {
 let isCall=1, hasDelaySlot=1 in {
   //@JumpLink {
   class JumpLink<bits<8> op, string instr_asm>:
-    FJ<op, (outs), (ins calltarget:$target, variable_ops),
-       !strconcat(instr_asm, "\t$target"), [(Cpu0JmpLink imm:$target)],
+    FJ<op, (outs), (ins calltarget:$addr, variable_ops),
+       !strconcat(instr_asm, "\t$addr"), [(Cpu0JmpLink imm:$addr)],
        IIBranch> {
 //#if CH >= CH10_1 2
        let DecoderMethod = "DecodeJumpTarget";

@@ -31,7 +31,7 @@ public:
   const Cpu0Subtarget &getCpu0Subtarget() const;
 
   // void addIRPasses() override;
-  // bool addInstSelector() override;
+  bool addInstSelector() override;
   // void addPreEmitPass() override;
 
 #ifdef ENABLE_GPRESTORE

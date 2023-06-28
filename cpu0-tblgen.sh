@@ -18,6 +18,35 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")"; pwd -P)"
 BUILD_ROOT_DIR=`pwd`
+LLVM_WORKSPACE=${SCRIPT_DIR}
+
+if [ -f "Cpu0.rk" ];then
+  rm -rf Cpu0.rk
+fi
+
+xllvm-tblgen --print-records \
+  -I ${LLVM_WORKSPACE}/llvm/include \
+  -I ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0 \
+  ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0/Cpu0.td \
+  -o Cpu0.rk
+
+xllvm-tblgen --print-detailed-records \
+  -I ${LLVM_WORKSPACE}/llvm/include \
+  -I ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0 \
+  ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0/Cpu0.td \
+  -o cpu0-detailed-records.rk
+
+xllvm-tblgen --gen-instr-docs \
+  -I ${LLVM_WORKSPACE}/llvm/include \
+  -I ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0 \
+  ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0/Cpu0.td \
+  -o Cpu0-instr-docs.rk
+
+#xllvm-tblgen --print-enums \
+#  -I ${LLVM_WORKSPACE}/llvm/include \
+#  -I ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0 \
+#  ${LLVM_WORKSPACE}/llvm/lib/Target/Cpu0/Cpu0.td \
+#  -o Cpu0-enums.rk
 
 # llvm-builder --force --target Cpu0 ${SCRIPT_DIR}
 cd ${SCRIPT_DIR}/llvm-build

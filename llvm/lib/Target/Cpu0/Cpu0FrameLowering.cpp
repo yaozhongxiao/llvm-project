@@ -84,7 +84,6 @@ using namespace llvm;
 //===----------------------------------------------------------------------===//
 
 const Cpu0FrameLowering *Cpu0FrameLowering::create(const Cpu0Subtarget &ST) {
-  assert(false && "Cpu0FrameLowering::create");
   return llvm::createCpu0SEFrameLowering(ST);
 }
 
@@ -113,7 +112,7 @@ MachineBasicBlock::iterator Cpu0FrameLowering::eliminateCallFramePseudoInstr(
     if (I->getOpcode() == Cpu0::ADJCALLSTACKDOWN)
       Amount = -Amount;
 
-    assert(false && "eliminateCallFramePseudoInstr");
+    llvm_unreachable("eliminateCallFramePseudoInstr");
     // STI.getInstrInfo()->adjustStackPtr(SP, Amount, MBB, I);
   }
   return MBB.erase(I);

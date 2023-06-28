@@ -21,7 +21,15 @@
 namespace llvm {
 class Cpu0TargetMachine;
 class FunctionPass;
+class PassRegistry;
+
+// FunctionPass *createCpu0DelaySlotFillerPass(Cpu0TargetMachine &TM);
+// FunctionPass *createCpu0DelJmpPass(Cpu0TargetMachine &TM);
+#ifdef ENABLE_GPRESTORE
+FunctionPass *createCpu0EmitGPRestorePass(Cpu0TargetMachine &TM);
+#endif
+
+void initializeCpu0DAGToDAGISelPass(PassRegistry &Registry);
 
 } // namespace llvm
-
 #endif // LLVM_LIB_TARGET_CPU0_CPU0_H

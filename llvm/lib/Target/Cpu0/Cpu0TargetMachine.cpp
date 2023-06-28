@@ -14,6 +14,7 @@
 #include "Cpu0TargetMachine.h"
 
 #include "Cpu0.h"
+#include "Cpu0MachineFunction.h"
 #include "Cpu0PassConfig.h"
 #include "Cpu0TargetObjectFile.h"
 #include "TargetInfo/Cpu0TargetInfo.h"
@@ -36,6 +37,9 @@ extern "C" void LLVMInitializeCpu0Target() {
   RegisterTargetMachine<Cpu0ebTargetMachine> X(getTheCpu0Target());
   //- Little endian Target Machine
   RegisterTargetMachine<Cpu0elTargetMachine> Y(getTheCpu0elTarget());
+
+  PassRegistry *PR = PassRegistry::getPassRegistry();
+  initializeCpu0DAGToDAGISelPass(*PR);
 }
 
 static std::string computeDataLayout(const Triple &TT, StringRef CPU,
@@ -118,6 +122,12 @@ Cpu0TargetMachine::getSubtargetImpl(const Function &F) const {
     I = std::make_unique<Cpu0Subtarget>(TargetTriple, CPU, FS, isLittle, *this);
   }
   return I.get();
+}
+
+MachineFunctionInfo *Cpu0TargetMachine::createMachineFunctionInfo(
+    BumpPtrAllocator &Allocator, const Function &F,
+    const TargetSubtargetInfo *STI) const {
+  return Cpu0FunctionInfo::create<Cpu0FunctionInfo>(Allocator, F, STI);
 }
 
 //===-------------------Cpu0ebTargetMachine------------------------===//

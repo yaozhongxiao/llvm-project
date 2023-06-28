@@ -54,10 +54,16 @@ public:
   TargetLoweringObjectFile *getObjFileLowering() const override {
     return TLOF.get();
   }
+
+  MachineFunctionInfo *
+  createMachineFunctionInfo(BumpPtrAllocator &Allocator, const Function &F,
+                            const TargetSubtargetInfo *STI) const override;
+
   bool isLittleEndian() const { return isLittle; }
   const Cpu0ABIInfo &getABI() const { return ABI; }
 };
 
+//===-------------------Cpu0ebTargetMachine------------------------===//
 /// Cpu0ebTargetMachine - Cpu032 big endian target machine.
 ///
 class Cpu0ebTargetMachine : public Cpu0TargetMachine {
@@ -71,6 +77,7 @@ public:
                       bool JIT);
 };
 
+//===-------------------Cpu0elTargetMachine------------------------===//
 /// Cpu0elTargetMachine - Cpu032 little endian target machine.
 ///
 class Cpu0elTargetMachine : public Cpu0TargetMachine {
@@ -85,5 +92,4 @@ public:
 };
 
 } // namespace llvm
-
 #endif // LLVM_LIB_TARGET_CPU0_CPU0TARGETMACHINE_H

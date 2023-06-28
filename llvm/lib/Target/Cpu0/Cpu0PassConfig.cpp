@@ -13,9 +13,10 @@
 
 #include "Cpu0PassConfig.h"
 
+#include "Cpu0SEISelDAGToDAG.h"
 #include "Cpu0Subtarget.h"
 #include "Cpu0TargetMachine.h"
-// #include "Cpu0TargetObjectFile.h"
+#include "Cpu0TargetObjectFile.h"
 
 using namespace llvm;
 
@@ -37,10 +38,10 @@ const Cpu0Subtarget &Cpu0PassConfig::getCpu0Subtarget() const {
 
 // Install an instruction selector pass using
 // the ISelDag to gen Cpu0 code.
-// bool Cpu0PassConfig::addInstSelector() {
-//   addPass(createCpu0SEISelDag(getCpu0TargetMachine(), getOptLevel()));
-//   return false;
-// }
+bool Cpu0PassConfig::addInstSelector() {
+  addPass(createCpu0SEISelDag(getCpu0TargetMachine(), getOptLevel()));
+  return false;
+}
 
 // #ifdef ENABLE_GPRESTORE
 // void Cpu0PassConfig::addPreRegAlloc() {

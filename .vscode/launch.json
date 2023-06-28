@@ -1,0 +1,28 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "llvm-debugger",
+      "program": "/Users/zhongxiao.yzx/Workspace/llvm-project/llvm-build/bin/llc",
+      "args": [
+        "--debug",
+        "-march=cpu0",
+        "-mcpu=cpu032I",
+        "-relocation-model=pic",
+        "-filetype=asm",
+        "${workspaceFolder}/llvm/test/Cpu0/ch3/ch3.bc",
+        "-o",
+        "${workspaceFolder}/llvm/test/Cpu0/ch3/ch3.cpu0.s"
+        // "${workspaceFolder}/Cpu0Test/square.ll"
+        // "-march=cpu0",
+        // "-mcpu=help"
+      ],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

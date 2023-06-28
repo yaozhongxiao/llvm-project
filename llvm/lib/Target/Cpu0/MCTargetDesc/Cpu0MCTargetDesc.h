@@ -32,20 +32,16 @@ class Triple;
 class raw_ostream;
 class raw_pwrite_stream;
 
-// MCCodeEmitter *createCpu0MCCodeEmitterEB(const MCInstrInfo &MCII,
-//                                          const MCRegisterInfo &MRI,
-//                                          MCContext &Ctx);
-// MCCodeEmitter *createCpu0MCCodeEmitterEL(const MCInstrInfo &MCII,
-//                                          const MCRegisterInfo &MRI,
-//                                          MCContext &Ctx);
+MCCodeEmitter *createCpu0MCCodeEmitterEB(const MCInstrInfo &MCII,
+                                         MCContext &Ctx);
+MCCodeEmitter *createCpu0MCCodeEmitterEL(const MCInstrInfo &MCII,
+                                         MCContext &Ctx);
+MCAsmBackend *createCpu0AsmBackend(const Target &T, const MCSubtargetInfo &STI,
+                                   const MCRegisterInfo &MRI,
+                                   const MCTargetOptions &Options);
 
-// MCAsmBackend *createCpu0AsmBackend(const Target &T,
-//                                    const MCSubtargetInfo &STI,
-//                                    const MCRegisterInfo &MRI,
-//                                    const MCTargetOptions &Options);
-
-// std::unique_ptr<MCObjectTargetWriter> createCpu0ELFObjectWriter(const Triple
-// &TT);
+std::unique_ptr<MCObjectTargetWriter>
+createCpu0ELFObjectWriter(const Triple &TT);
 
 } // namespace llvm
 

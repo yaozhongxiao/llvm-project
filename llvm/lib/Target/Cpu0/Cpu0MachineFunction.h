@@ -23,19 +23,25 @@
 
 namespace llvm {
 
-//@1 {
 /// Cpu0FunctionInfo - This class is derived from MachineFunction private
 /// Cpu0 target-specific information for each MachineFunction.
 class Cpu0FunctionInfo : public MachineFunctionInfo {
 public:
-  Cpu0FunctionInfo(MachineFunction &MF)
-      : MF(MF), VarArgsFrameIndex(0), SRetReturnReg(0), CallsEhReturn(false),
+  Cpu0FunctionInfo(const Function &F, const TargetSubtargetInfo *STI)
+      : VarArgsFrameIndex(0), SRetReturnReg(0), CallsEhReturn(false),
         CallsEhDwarf(false), GlobalBaseReg(0),
         InArgFIRange(std::make_pair(-1, 0)),
         OutArgFIRange(std::make_pair(-1, 0)), GPFI(0), DynAllocFI(0),
         EmitNOAT(false), MaxCallFrameSize(0) {}
 
   ~Cpu0FunctionInfo();
+
+  MachineFunctionInfo *
+  clone(BumpPtrAllocator &Allocator, MachineFunction &DestMF,
+        const DenseMap<MachineBasicBlock *, MachineBasicBlock *> &Src2DstMBB)
+      const override {
+    return DestMF.cloneInfo<Cpu0FunctionInfo>(*this);
+  }
 
   bool isInArgFI(int FI) const {
     return FI <= InArgFIRange.first && FI >= InArgFIRange.second;
@@ -79,7 +85,7 @@ public:
   bool callsEhDwarf() const { return CallsEhDwarf; }
   void setCallsEhDwarf() { CallsEhDwarf = true; }
 
-  void createEhDataRegsFI();
+  void createEhDataRegsFI(MachineFunction &MF);
   int getEhDataRegFI(unsigned Reg) const { return EhDataRegFI[Reg]; }
 
   unsigned getMaxCallFrameSize() const { return MaxCallFrameSize; }
@@ -90,16 +96,15 @@ public:
 
   /// Create a MachinePointerInfo that has an ExternalSymbolPseudoSourceValue
   /// object representing a GOT entry for an external function.
-  MachinePointerInfo callPtrInfo(const char *ES);
+  MachinePointerInfo callPtrInfo(const MachineFunction &MF, const char *ES);
 
   /// Create a MachinePointerInfo that has a GlobalValuePseudoSourceValue object
   /// representing a GOT entry for a global function.
-  MachinePointerInfo callPtrInfo(const GlobalValue *GV);
+  MachinePointerInfo callPtrInfo(const MachineFunction &MF,
+                                 const GlobalValue *GV);
 
 private:
   virtual void anchor();
-
-  MachineFunction &MF;
 
   /// VarArgsFrameIndex - FrameIndex for start of varargs area.
   int VarArgsFrameIndex;
